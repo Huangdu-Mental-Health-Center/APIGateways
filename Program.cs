@@ -4,6 +4,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System.Net;
 using System.IO;
+using System;
 
 namespace APIGateways
 {
@@ -21,7 +22,7 @@ namespace APIGateways
                     webBuilder
                     .UseKestrel(o =>
                     {
-                        o.Listen(IPAddress.Any, GlobalVars.listenPort);
+                        o.Listen(IPAddress.Any, Convert.ToInt32(GlobalVars.listenPort));
                     })
                     .UseUrls($"http://localhost:{GlobalVars.listenPort}")
                     .UseContentRoot(Directory.GetCurrentDirectory())
