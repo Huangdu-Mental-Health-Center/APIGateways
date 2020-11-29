@@ -1,5 +1,6 @@
 # API Gateways
 Huangdu Mental Health Center API 网关  
+![build_status](https://github.com/Huangdu-Mental-Health-Center/APIGateways/workflows/.NET%20Core/badge.svg)
 ![language](https://img.shields.io/badge/language-C%23%209.0-blue.svg)
 ![env](https://img.shields.io/badge/-.NET%20Core%205.0-blueviolet)
 ## 1. 开发环境
