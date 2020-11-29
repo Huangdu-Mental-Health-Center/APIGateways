@@ -21,7 +21,7 @@ Huangdu Mental Health Center API 网关。
 
 - [MockHospitalData](https://github.com/Huangdu-Mental-Health-Center/MockHospitalData)  
   路由规则  
-  - `/{query}` => `/api/{loginOrRegister}`
+  - `/{query}` => `/api/{query}`
 - [RegisterAndLoginServices](https://github.com/Huangdu-Mental-Health-Center/RegisterAndLoginServices)  
   路由规则  
   - `/api/{loginOrRegister}` => `/api/{loginOrRegister}`
@@ -47,7 +47,7 @@ Huangdu Mental Health Center API 网关。
 
 ## 3. 部署文档
 
-### **1.安装 .NET 5.0 SDK** 
+### **1. 安装 .NET 5.0 SDK** 
 
 0. 安装 .NET 之前，请根据自身系统环境将 Microsoft 包签名密钥添加到受信任密钥列表，并添加包存储库。  
 [MS-Document](https://docs.microsoft.com/en-us/windows-server/administration/linux-package-repository-for-microsoft-software)
