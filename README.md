@@ -21,7 +21,7 @@ Huangdu Mental Health Center API 网关。
 
 - [MockHospitalData](https://github.com/Huangdu-Mental-Health-Center/MockHospitalData)  
   路由规则  
-  - `/{query}` => `/api/{query}`
+  - `/{query}` => `/api/hospital_data/{query}`
 - [RegisterAndLoginServices](https://github.com/Huangdu-Mental-Health-Center/RegisterAndLoginServices)  
   路由规则  
   - `/api/{loginOrRegister}` => `/api/{loginOrRegister}`
