@@ -1,0 +1,35 @@
+{
+  "Routes": [
+    {
+      "DownstreamPathTemplate": "/api/{loginOrRegister}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7777
+        }
+      ],
+      "UpstreamPathTemplate": "/api/{loginOrRegister}",
+      "UpstreamHttpMethod": [ "Post" ]
+    },
+    {
+      "DownstreamPathTemplate": "/{query}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 14000
+        }
+      ],
+      "UpstreamPathTemplate": "/api/hospital_data/{query}",
+      "UpstreamHttpMethod": [ "Get" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "UserKey",
+        "AllowedScopes": []
+      }
+    }
+  ],
+  "GlobalConfiguration": {
+    "BaseUrl": "https://localhost:5200"
+  }
+}

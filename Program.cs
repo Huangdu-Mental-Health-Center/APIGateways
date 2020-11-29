@@ -2,10 +2,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Net;
+using System.IO;
 
 namespace APIGateways
 {
@@ -20,6 +18,27 @@ namespace APIGateways
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
+                    webBuilder
+                    .UseKestrel(o =>
+                    {
+                        o.Listen(IPAddress.Any, GlobalVars.listenPort);
+                    })
+                    .UseUrls($"http://localhost:{GlobalVars.listenPort}")
+                    .UseContentRoot(Directory.GetCurrentDirectory())
+                    .ConfigureAppConfiguration((hostingContext, config) =>
+                    {
+                        config
+                            .SetBasePath(hostingContext.HostingEnvironment.ContentRootPath)
+                            .AddJsonFile("appsettings.json", true, true)
+                            .AddJsonFile($"appsettings.{hostingContext.HostingEnvironment.EnvironmentName}.json", true, true)
+                            .AddJsonFile("ocelot.json", false, true)
+                            .AddEnvironmentVariables();
+                    })
+                    .ConfigureLogging((hostingContext, logging) =>
+                    {
+                        logging.ClearProviders();
+                        logging.AddConsole();
+                    });
                     webBuilder.UseStartup<Startup>();
                 });
     }
