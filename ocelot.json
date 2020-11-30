@@ -22,11 +22,7 @@
         }
       ],
       "UpstreamPathTemplate": "/api/hospital_data/{query}",
-      "UpstreamHttpMethod": [ "Get" ],
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "UserKey",
-        "AllowedScopes": []
-      }
+      "UpstreamHttpMethod": [ "Get" ]
     }
   ],
   "GlobalConfiguration": {
