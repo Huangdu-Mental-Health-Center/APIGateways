@@ -14,6 +14,8 @@ namespace APIGateways
 {
     public class Startup
     {
+        readonly string AllowAllOrigins = "AllowAllOrigins";
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -24,6 +26,16 @@ namespace APIGateways
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options =>
+            {
+                options.AddPolicy(name: AllowAllOrigins, builder =>
+                  {
+                      builder.AllowAnyOrigin()
+                   .AllowAnyHeader()
+                   .AllowAnyMethod();
+                  });
+            });
+                
             services.AddRazorPages();
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -74,6 +86,8 @@ namespace APIGateways
             {
                 app.UseExceptionHandler("/Error");
             }
+
+            app.UseCors(AllowAllOrigins);
 
             app.UseAuthentication(); // ???
 
