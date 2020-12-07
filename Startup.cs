@@ -87,13 +87,13 @@ namespace APIGateways
                 app.UseExceptionHandler("/Error");
             }
 
-            app.UseCors(AllowAllOrigins);
-
-            app.UseAuthentication(); // ???
-
             app.UseStaticFiles();
 
             app.UseRouting();
+
+            app.UseCors(AllowAllOrigins);
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 
