@@ -15,6 +15,8 @@ namespace APIGateways
     public class Startup
     {
         readonly string AllowAllOrigins = "AllowAllOrigins";
+        readonly string userKey = "UserKey";
+        readonly string adminKey = "AdminKey";
 
         public Startup(IConfiguration configuration)
         {
@@ -40,7 +42,7 @@ namespace APIGateways
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 // 用户验证：需要以任意身份登录
-                .AddJwtBearer("UserKey", options =>
+                .AddJwtBearer(userKey, options =>
                 {
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
@@ -49,14 +51,14 @@ namespace APIGateways
                         ValidateLifetime = true, //是否验证失效时间
                         ClockSkew = TimeSpan.FromSeconds(30),
                         ValidateIssuerSigningKey = true, //是否验证SecurityKey
-                        // ValidAudience = "user", //Audience
+                        ValidAudiences = new[] { "user", "admin", "suadmin" }, //Audience
                         ValidIssuer = GlobalVars.domain, //Issuer，这两项和前面签发jwt的设置一致
                         IssuerSigningKey =
                             new SymmetricSecurityKey(Encoding.UTF8.GetBytes(GlobalVars.secret)) //拿到SecurityKey
                     };
                 })
                 // 管理员验证：需要以管理员账户登录
-                .AddJwtBearer("AdminKey", options =>
+                .AddJwtBearer(adminKey, options =>
                 {
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
@@ -65,7 +67,7 @@ namespace APIGateways
                         ValidateLifetime = true, //是否验证失效时间
                         ClockSkew = TimeSpan.FromSeconds(30),
                         ValidateIssuerSigningKey = true, //是否验证SecurityKey
-                        ValidAudience = "admin", //Audience
+                        ValidAudiences = new[] { "admin", "suadmin" }, //Audience
                         ValidIssuer = GlobalVars.domain, //Issuer，这两项和前面签发jwt的设置一致
                         IssuerSigningKey =
                             new SymmetricSecurityKey(Encoding.UTF8.GetBytes(GlobalVars.secret)) //拿到SecurityKey
