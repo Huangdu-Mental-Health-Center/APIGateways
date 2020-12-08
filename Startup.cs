@@ -14,7 +14,7 @@ namespace APIGateways
 {
     public class Startup
     {
-        readonly string AllowAllOrigins = "AllowAllOrigins";
+        readonly string AllowThisSite = "AllowThisSite";
         readonly string userKey = "UserKey";
         readonly string adminKey = "AdminKey";
 
@@ -30,14 +30,17 @@ namespace APIGateways
         {
             services.AddCors(options =>
             {
-                options.AddPolicy(name: AllowAllOrigins, builder =>
+                options.AddPolicy(name: AllowThisSite, builder =>
                   {
-                      builder.AllowAnyOrigin()
-                   .AllowAnyHeader()
-                   .AllowAnyMethod();
+                      builder.WithOrigins($"http://*.{GlobalVars.domain}")
+                      .SetIsOriginAllowedToAllowWildcardSubdomains()
+                      .AllowAnyHeader()
+                      .AllowAnyMethod();
                   });
             });
-                
+
+            services.AddResponseCaching();
+
             services.AddRazorPages();
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -93,7 +96,9 @@ namespace APIGateways
 
             app.UseRouting();
 
-            app.UseCors(AllowAllOrigins);
+            app.UseCors(AllowThisSite);
+
+            app.UseResponseCaching();
 
             app.UseAuthentication();
 
