@@ -50,7 +50,7 @@ namespace APIGateways
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuer = true, //是否验证Issuer
-                        ValidateAudience = false, //是否验证Audience
+                        ValidateAudience = true, //是否验证Audience
                         ValidateLifetime = true, //是否验证失效时间
                         ClockSkew = TimeSpan.FromSeconds(30),
                         ValidateIssuerSigningKey = true, //是否验证SecurityKey
