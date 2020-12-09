@@ -32,7 +32,7 @@ namespace APIGateways
             {
                 options.AddPolicy(name: AllowThisSite, builder =>
                   {
-                      builder.WithOrigins($"http://*.{GlobalVars.domain}")
+                      builder.WithOrigins(GlobalVars.corsDomains)
                       .SetIsOriginAllowedToAllowWildcardSubdomains()
                       .AllowAnyHeader()
                       .AllowAnyMethod();

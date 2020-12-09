@@ -9,5 +9,6 @@ namespace APIGateways
         public static readonly string secret = ConfigurationManager.AppSettings["Secret"];
         public static readonly string domain = ConfigurationManager.AppSettings["Domain"];
         public static readonly string listenPort = ConfigurationManager.AppSettings["ListenPort"];
+        public static readonly string[] corsDomains = ConfigurationManager.AppSettings["CorsDomains"].Split(",");
     }
 }

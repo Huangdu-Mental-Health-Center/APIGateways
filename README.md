@@ -72,6 +72,7 @@ cd ./APIGateways
   <appSettings>
     <add key="Secret" value="你的 JWT Secret"/>
     <add key="Domain" value="你的 JWT Domain"/>
+    <add key="CorsDomains" value="http://localhost,你的服务地址（可以添加多个，使用逗号间隔）"/>
     <add key="ListenPort" value="服务所使用端口"/>
   </appSettings>
 </configuration>
