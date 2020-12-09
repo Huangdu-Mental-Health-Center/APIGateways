@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using System.Net;
 using System.IO;
 using System;
+using NLog.Web;
 
 namespace APIGateways
 {
@@ -39,7 +40,8 @@ namespace APIGateways
                     {
                         logging.ClearProviders();
                         logging.AddConsole();
-                    });
+                    })
+                    .UseNLog();
                     webBuilder.UseStartup<Startup>();
                 });
     }
