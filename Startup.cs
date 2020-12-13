@@ -6,17 +6,20 @@ using Microsoft.Extensions.Hosting;
 using System;
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
+using Ocelot.Cache.CacheManager;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Ocelot.Authorization;
+using System.Linq;
+using APIGateways.Services;
 
 namespace APIGateways
 {
     public class Startup
     {
         readonly string AllowThisSite = "AllowThisSite";
-        readonly string userKey = "UserKey";
-        readonly string adminKey = "AdminKey";
+        readonly string authKey = "AuthKey";
 
         public Startup(IConfiguration configuration)
         {
@@ -45,7 +48,7 @@ namespace APIGateways
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 // 用户验证：需要以任意身份登录
-                .AddJwtBearer(userKey, options =>
+                .AddJwtBearer(authKey, options =>
                 {
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
@@ -59,25 +62,15 @@ namespace APIGateways
                         IssuerSigningKey =
                             new SymmetricSecurityKey(Encoding.UTF8.GetBytes(GlobalVars.secret)) //拿到SecurityKey
                     };
-                })
-                // 管理员验证：需要以管理员账户登录
-                .AddJwtBearer(adminKey, options =>
-                {
-                    options.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateIssuer = true, //是否验证Issuer
-                        ValidateAudience = true, //是否验证Audience
-                        ValidateLifetime = true, //是否验证失效时间
-                        ClockSkew = TimeSpan.FromSeconds(30),
-                        ValidateIssuerSigningKey = true, //是否验证SecurityKey
-                        ValidAudiences = new[] { "admin", "suadmin" }, //Audience
-                        ValidIssuer = GlobalVars.domain, //Issuer，这两项和前面签发jwt的设置一致
-                        IssuerSigningKey =
-                            new SymmetricSecurityKey(Encoding.UTF8.GetBytes(GlobalVars.secret)) //拿到SecurityKey
-                    };
                 });
 
-            services.AddOcelot();
+            services.AddOcelot()
+                .AddCacheManager(x =>
+                {
+                    x.WithDictionaryHandle();
+                });
+
+            services.DecorateClaimAuthorizer();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
