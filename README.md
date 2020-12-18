@@ -1,4 +1,5 @@
 # API Gateways
+
 Huangdu Mental Health Center API 网关。  
 ![build_status](https://github.com/Huangdu-Mental-Health-Center/APIGateways/workflows/.NET%20Core/badge.svg)
 ![language](https://img.shields.io/badge/language-C%23%209.0-blue.svg)
@@ -28,32 +29,89 @@ Huangdu Mental Health Center API 网关。
 
 具体 API 的实现与使用您可以参考对应 API 的文档。
 
-### 2. 鉴权功能
+### 2. 身份验证与鉴权功能
+
+#### 身份验证功能
 
 为 API 添加身份验证（非业务逻辑层面）的安全策略。  
+需要登录身份验证的 API，请在 `ocelot.json` 中对应 API 代码段添加以下示例项：
+
+```json
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "AuthKey",
+        "AllowedScopes": []
+      }
+```
+
+`AuthenticationProviderKey` 指定使用的验证 Key，目前只有 `AuthKey`，对所有登录用户进行验证。  
+`AllowedScopes` 由于使用 JWT 验证，请**不要**修改这一项。
+
+#### 用户鉴权功能
+
 目前已实现的鉴权方案：
 
-- 允许所有人访问（默认）。
-- 仅登录用户访问。
+- 仅登录用户访问。（仅启用验证而不添加鉴权时默认）
 - 仅管理员可访问。
+- 仅超级管理员可访问。
+
+要在网关层面实现鉴权，请在 `ocelot.json` 中对应 API 代码段添加以下示例项：
+
+```json
+      "RouteClaimsRequirement": {
+        "aud": "admin",
+        "http///schemas.microsoft.com/ws/2008/06/identity/claims/role": "suadmin"
+      }
+```
+
+`aud` 字段可选 `admin` `user` ，用于区分管理员和一般用户。  
+`http///schemas.microsoft.com/ws/2008/06/identity/claims/role` 字段可选 `admin` `suadmin` ，用于区分一般管理员和超级管理员，注意在这里请使用 `http///` 代替 `http://` ，以规避 Ocelot 框架中 json 解析的问题。
 
 ### 3. 日志记录功能
 
-*Todo*
+Ocelot 日志记录使用 .NET 框架原生配置，因此考虑使用 `nlog` ，产生的日志记录在 `./log` 文件夹下。  
+相关配置请参考 [nlog.config](./nlog.config)。
 
-### 4. 其他功能
+### 4. 缓存功能
 
-*Todo：监控，均衡负载，缓存等*
+使用 Ocelot 框架的原生缓存管理 `Ocelot.Cache.CacheManager`。  
+可以在内存中缓存请求结果，降低服务的调用频率，适用于如一些非敏感信息的查询。  
+要启用缓存，请在 `ocelot.json` 中对应 API 代码段添加以下示例项：
+
+```json
+      "FileCacheOptions": {
+        "TtlSeconds": 15,
+        "Region": "somename"
+      }
+```
+
+`TtlSeconds` 项配置缓存失效时间，单位为秒。
+
+### 5. 负载均衡功能
+
+使用 Ocelot 框架的负载均衡功能。  
+要启用负载均衡，请在 `ocelot.json` 中对应 API 代码段添加以下示例项：
+
+```json
+      "LoadBalancerOptions": {
+        "Type": "RoundRobin"
+      }
+```
+
+`Type` 指定负载均衡方案，详见 [Ocelot Doc](https://ocelot.readthedocs.io/en/latest/features/loadbalancer.html)。
+
+### 6. 其他功能
+
+*Todo：监控，服务发现等*
 
 ## 3. 部署文档
 
 ### **1. 安装 .NET 5.0 SDK** 
 
 0. 安装 .NET 之前，请根据自身系统环境将 Microsoft 包签名密钥添加到受信任密钥列表，并添加包存储库。  
-[MS-Document](https://docs.microsoft.com/en-us/windows-server/administration/linux-package-repository-for-microsoft-software)
+   [MS-Document](https://docs.microsoft.com/en-us/windows-server/administration/linux-package-repository-for-microsoft-software)
 
 1. 安装 .Net 5.0。  
-    [MS-Document](https://docs.microsoft.com/en-us/dotnet/core/install/linux)
+   [MS-Document](https://docs.microsoft.com/en-us/dotnet/core/install/linux)
 
 2. clone 本项目。
 
@@ -116,9 +174,7 @@ dotnet run -c release
       "UpstreamPathTemplate": "/api/hospital_data/{query}",
       "UpstreamHttpMethod": [ "Get" ],
       "AuthenticationOptions": { // 若服务需要认证，则添加该字段
-        "AuthenticationProviderKey": "UserKey", // 指定使用的 ProviderKey，目前有两种
-                                                // - UserKey 所有登录用户
-                                                // - AdminKey 仅管理员可访问
+        "AuthenticationProviderKey": "AuthKey",
         "AllowedScopes": []
       }
     }
@@ -150,14 +206,14 @@ dotnet run -c release
       "UpstreamPathTemplate": "/api/test",
       "UpstreamHttpMethod": [ "Get" ],
       "AuthenticationOptions": {
-        "AuthenticationProviderKey": "AdminKey",
+        "AuthenticationProviderKey": "AuthKey",
         "AllowedScopes": []
+      },
+      "RouteClaimsRequirement": {
+        "aud": "admin"
       }
     },
     ... // 其他服务的内容
 ```
 
 **注意，您可以在 API 网关服务运行时修改配置文件以实现热更新。**
-
-
-
