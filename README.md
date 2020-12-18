@@ -26,6 +26,7 @@ Huangdu Mental Health Center API 网关。
 - [RegisterAndLoginServices](https://github.com/Huangdu-Mental-Health-Center/RegisterAndLoginServices)  
   路由规则  
   - `/api/{loginOrRegister}` => `/api/{loginOrRegister}`
+  - `/api/changepassword` => `/api/changepassword`
 
 具体 API 的实现与使用您可以参考对应 API 的文档。
 
@@ -46,6 +47,8 @@ Huangdu Mental Health Center API 网关。
 `AuthenticationProviderKey` 指定使用的验证 Key，目前只有 `AuthKey`，对所有登录用户进行验证。  
 `AllowedScopes` 由于使用 JWT 验证，请**不要**修改这一项。
 
+用户未登录，或凭证过期会返回 `401 Unauthorized`。
+
 #### 用户鉴权功能
 
 目前已实现的鉴权方案：
@@ -65,6 +68,8 @@ Huangdu Mental Health Center API 网关。
 
 `aud` 字段可选 `admin` `user` ，用于区分管理员和一般用户。  
 `http///schemas.microsoft.com/ws/2008/06/identity/claims/role` 字段可选 `admin` `suadmin` ，用于区分一般管理员和超级管理员，注意在这里请使用 `http///` 代替 `http://` ，以规避 Ocelot 框架中 json 解析的问题。
+
+用户调用无权访问的 API 会返回 `403 Forbidden`。
 
 ### 3. 日志记录功能
 
@@ -99,7 +104,51 @@ Ocelot 日志记录使用 .NET 框架原生配置，因此考虑使用 `nlog` �
 
 `Type` 指定负载均衡方案，详见 [Ocelot Doc](https://ocelot.readthedocs.io/en/latest/features/loadbalancer.html)。
 
-### 6. 其他功能
+### 6. 限流功能
+
+使用 Ocelot 框架的限流功能。  
+要启用限流功能，请在 `ocelot.json` 中对应 API 代码段添加以下示例项：
+
+```json
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "1s",
+        "PeriodTimespan": 1,
+        "Limit": 3
+      }
+```
+
+`ClientWhitelist` 白名单，列表中的客户端将不受限流策略影响。  
+`EnableRateLimiting` 是否启用限流。  
+`Period` 与 `Limit` 表示在 `Period` 时间内，API 最多可以被调用 `Limit` 次。  
+`PeriodTimespan` 限流触发后，再次调用 API 需要等待的时间，单位为秒。
+
+限流被触发时，调用 API 会返回 `429 Too Many Requests`。
+
+### 7. 熔断机制
+
+使用  `Ocelot.Provider.Polly` 实现。  
+当某个服务多次无响应后可以启用熔断，熔断时间内再次调用此 API 会快速返回错误信息，避免阻塞。  
+要启用熔断机制，请在 `ocelot.json` 中对应 API 代码段添加以下示例项：
+
+```json
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 3,
+        "DurationOfBreak": 30000,
+        "TimeoutValue": 2000
+      }
+```
+
+`ExceptionsAllowedBeforeBreaking` 熔断前的尝试次数。  
+`DurationOfBreak` 熔断时间，单位为毫秒。  
+`TimeoutValue` 响应超时时间，若服务超过这个设定的时间未响应，则返回错误信息。
+
+如果不想启用熔断机制，可以单独设置响应超时时间。
+
+在服务超时未响应或熔断的情况下调用，会返回 `503 Service Unavailable`。
+
+### 8. 其他功能
 
 *Todo：监控，服务发现等*
 

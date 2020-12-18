@@ -7,11 +7,10 @@ using System;
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
 using Ocelot.Cache.CacheManager;
+using Ocelot.Provider.Polly;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using Ocelot.Authorization;
-using System.Linq;
 using APIGateways.Services;
 
 namespace APIGateways
@@ -68,7 +67,8 @@ namespace APIGateways
                 .AddCacheManager(x =>
                 {
                     x.WithDictionaryHandle();
-                });
+                })
+                .AddPolly();
 
             services.DecorateClaimAuthorizer();
         }
