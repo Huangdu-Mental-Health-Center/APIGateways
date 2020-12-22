@@ -13,6 +13,26 @@
       "UpstreamHttpMethod": [ "Post" ]
     },
     {
+      "DownstreamPathTemplate": "/api/register/admin",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7777
+        }
+      ],
+      "UpstreamPathTemplate": "/api/register/admin",
+      "UpstreamHttpMethod": [ "Post" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "AuthKey",
+        "AllowedScopes": []
+      },
+      "RouteClaimsRequirement": {
+        "aud": "admin",
+        "http///schemas.microsoft.com/ws/2008/06/identity/claims/role": "suadmin"
+      }
+    },
+    {
       "DownstreamPathTemplate": "/api/changepassword",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
@@ -23,6 +43,54 @@
       ],
       "UpstreamPathTemplate": "/api/changepassword",
       "UpstreamHttpMethod": [ "Put" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "AuthKey",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/userinfo",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7777
+        }
+      ],
+      "UpstreamPathTemplate": "/api/userinfo",
+      "UpstreamHttpMethod": [ "Get" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "AuthKey",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/userinfo",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7777
+        }
+      ],
+      "UpstreamPathTemplate": "/api/userinfo/",
+      "UpstreamHttpMethod": [ "Get" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "AuthKey",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/userinfo/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7777
+        }
+      ],
+      "UpstreamPathTemplate": "/api/userinfo/{id}",
+      "UpstreamHttpMethod": [ "Get" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "AuthKey",
         "AllowedScopes": []
