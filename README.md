@@ -26,6 +26,10 @@ Huangdu Mental Health Center API 网关。
 - [RegisterAndLoginServices](https://github.com/Huangdu-Mental-Health-Center/RegisterAndLoginServices)  
   路由规则  
   - `/api/{loginOrRegister}` => `/api/{loginOrRegister}`
+  - `/api/register/admin` => `/api/register/admin`
+  - `/api/userinfo` => `/api/userinfo`
+  - `/api/userinfo/` => `/api/userinfo`
+  - `/api/userinfo/{id}` => `/api/userinfo/{id}`
   - `/api/changepassword` => `/api/changepassword`
 
 具体 API 的实现与使用您可以参考对应 API 的文档。
