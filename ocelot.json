@@ -102,6 +102,22 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
+          "Port": 16000
+        }
+      ],
+      "UpstreamPathTemplate": "/api/medical_records/{query}",
+      "UpstreamHttpMethod": [ "Get" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "AuthKey",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/{query}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
           "Port": 14000
         }
       ],
