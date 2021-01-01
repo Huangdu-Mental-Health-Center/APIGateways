@@ -20,6 +20,11 @@ Huangdu Mental Health Center API 网关。
 根据上下文或消息内容将请求发送到不同的目标。  
 目前已部署的微服务：
 
+- Schedule  
+  路由规则
+
+  - `/api/{query}` => `/api/{query}`
+
 - [MockHospitalData](https://github.com/Huangdu-Mental-Health-Center/MockHospitalData)  
   路由规则  
   
