@@ -123,6 +123,25 @@
       ],
       "UpstreamPathTemplate": "/api/hospital_data/{query}",
       "UpstreamHttpMethod": [ "Get" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/{query}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5700
+        }
+      ],
+      "UpstreamPathTemplate": "/api/{query}",
+      "UpstreamHttpMethod": [ "Get" ],
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "1s",
+        "PeriodTimespan": 2,
+        "Limit": 15
+      }
     }
   ],
   "GlobalConfiguration": {
