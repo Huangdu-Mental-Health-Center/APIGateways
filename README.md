@@ -20,10 +20,15 @@ Huangdu Mental Health Center API 网关。
 根据上下文或消息内容将请求发送到不同的目标。  
 目前已部署的微服务：
 
+- Appointment  
+  路由规则
+
+  - `/api/appointment/{query}` => `/api/appointment/{query}`
+
 - Schedule  
   路由规则
 
-  - `/api/{query}` => `/api/{query}`
+  - `/api/schedule?{query}` => `/api/schedule?{query}`
 
 - [MockHospitalData](https://github.com/Huangdu-Mental-Health-Center/MockHospitalData)  
   路由规则  
@@ -36,7 +41,8 @@ Huangdu Mental Health Center API 网关。
 
 - [RegisterAndLoginServices](https://github.com/Huangdu-Mental-Health-Center/RegisterAndLoginServices)  
   路由规则  
-  - `/api/{loginOrRegister}` => `/api/{loginOrRegister}`
+  - `/api/login` => `/api/login`
+  - `/api/register` => `/api/register`
   - `/api/register/admin` => `/api/register/admin`
   - `/api/userinfo` => `/api/userinfo`
   - `/api/userinfo/` => `/api/userinfo`
