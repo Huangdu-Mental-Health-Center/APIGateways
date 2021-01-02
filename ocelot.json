@@ -137,7 +137,7 @@
       "UpstreamHttpMethod": [ "Get" ]
     },
     {
-      "DownstreamPathTemplate": "/api/{query}",
+      "DownstreamPathTemplate": "/api/schedule?{query}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -145,7 +145,7 @@
           "Port": 5700
         }
       ],
-      "UpstreamPathTemplate": "/api/{query}",
+      "UpstreamPathTemplate": "/api/schedule?{query}",
       "UpstreamHttpMethod": [ "Get" ],
       "RateLimitOptions": {
         "ClientWhitelist": [],
