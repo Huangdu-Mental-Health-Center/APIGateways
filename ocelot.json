@@ -1,7 +1,7 @@
 {
   "Routes": [
     {
-      "DownstreamPathTemplate": "/api/{loginOrRegister}",
+      "DownstreamPathTemplate": "/api/login",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -9,7 +9,19 @@
           "Port": 7777
         }
       ],
-      "UpstreamPathTemplate": "/api/{loginOrRegister}",
+      "UpstreamPathTemplate": "/api/login",
+      "UpstreamHttpMethod": [ "Post" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/register",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7777
+        }
+      ],
+      "UpstreamPathTemplate": "/api/register",
       "UpstreamHttpMethod": [ "Post" ]
     },
     {
@@ -141,6 +153,22 @@
         "Period": "1s",
         "PeriodTimespan": 2,
         "Limit": 15
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/appointment/{query}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5800
+        }
+      ],
+      "UpstreamPathTemplate": "/api/appointment/{query}",
+      "UpstreamHttpMethod": [ "Get", "Post", "Delete" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "AuthKey",
+        "AllowedScopes": []
       }
     }
   ],
